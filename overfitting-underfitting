@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Setup arrays to store train and test accuracies
 neighbors = np.arange(1, 9)
 train_accuracy = np.empty(len(neighbors))
