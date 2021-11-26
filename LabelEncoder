@@ -5,10 +5,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
-main = pd.read_csv('main.csv', delimiter =';', index_col=0)
+main = pd.read_csv('main.csv', delimiter =';')
 main_types = ['L','M','H']
 encoder = preprocessing.LabelEncoder()
 encoder.fit(main_types)
 print("\nLabel mapping:")
 for i, item in enumerate(encoder.classes_):
     print(item, '-->', i)
+main_tips = str(main_types)
