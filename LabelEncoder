@@ -1,15 +1,24 @@
 #!/usr/bin/python3
-import pandas as pd
 import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
-from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
 main = pd.read_csv('main.csv', delimiter =';')
-main_types = ['L','M','H']
-encoder = preprocessing.LabelEncoder()
-encoder.fit(main_types)
-print("\nLabel mapping:")
-for i, item in enumerate(encoder.classes_):
-    print(item, '-->', i)
-main_tips = str(main_types)
+labelencoder=LabelEncoder()
+input_data['gender_N']=labelencoder.fit_transform(input_data['gender'])
+input_data['NationalITy_N']=labelencoder.fit_transform(input_data['NationalITy'])
+input_data['PlaceofBirth_N']=labelencoder.fit_transform(input_data['PlaceofBirth'])
+input_data['StageID_N']=labelencoder.fit_transform(input_data['StageID'])
+input_data['GradeID_N']=labelencoder.fit_transform(input_data['GradeID'])
+input_data['SectionID_N']=labelencoder.fit_transform(input_data['SectionID'])
+input_data['Topic_N']=labelencoder.fit_transform(input_data['Topic'])
+input_data['Semester_N']=labelencoder.fit_transform(input_data['Semester'])
+input_data['Relation_N']=labelencoder.fit_transform(input_data['Relation'])
+input_data['ParentAnsweringSurvey_N']=labelencoder.fit_transform(input_data['ParentAnsweringSurvey'])
+input_data['ParentschoolSatisfaction_N']=labelencoder.fit_transform(input_data['ParentschoolSatisfaction'])
+input_data['StudentAbsenceDays_N']=labelencoder.fit_transform(input_data['StudentAbsenceDays'])
+input_data['Class_N']=labelencoder.fit_transform(input_data['Class'])
+input_data['Class']=input_data['Class'].astype('category')
+print(input_data.dtypes)
+input_data['Class']=input_data['Class'].cat.codes
+print(input_data)
+df=pd.DataFrame(input_data,columns=["Class"])
+print(df)
