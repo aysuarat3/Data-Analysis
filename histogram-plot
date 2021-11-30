@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 input_data = pd.read_csv('main.csv')
 from sklearn.preprocessing import LabelEncoder
