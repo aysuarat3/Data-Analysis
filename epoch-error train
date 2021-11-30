@@ -1,0 +1,28 @@
+# -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+input_data = pd.read_csv('main.csv')
+import neurolab as nl
+input_data['Class_N']=labelencoder.fit_transform(input_data['Class'])
+input_data['Class']=input_data['Class'].astype('category')
+input_data['Class']=input_data['Class'].cat.codes
+df=pd.DataFrame(input_data,columns=["Discussion"])
+df1=pd.DataFrame(input_data,columns=["Class"])
+print(df)
+print(df1)
+dim1_min, dim1_max, dim2_min, dim2_max = 0, 1, 0, 1
+n_output = df1.shape[1]
+print(n_output)
+nn_output_layer = df1.shape[1] #we have one output
+dim1= [dim1_min, dim1_max]
+neural_net = nl.net.newp([dim1], nn_output_layer)
+error = neural_net.train(df, df1, epochs=200, show=20, lr=0.01)
+plt.figure()
+plt.plot(error)
+plt.xlabel('Number of epochs')
+plt.ylabel('Training error')
+plt.title('Training error progress')
+plt.grid()
+plt.show()
+plt.clf()
