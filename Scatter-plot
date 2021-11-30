@@ -13,3 +13,5 @@ plt.xlabel('Dimension1')
 plt.ylabel('Dimension2')
 plt.title('Input data')
 plt.show()
+
+
