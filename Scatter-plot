@@ -1,0 +1,15 @@
+#!/usr/bin/python3
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+input_data = pd.read_csv('main.csv')
+df=pd.DataFrame(input_data,columns=["raisedhands"])
+print(df)
+df1=pd.DataFrame(input_data,columns=["AnnouncementsView"])
+print(df1)
+plt.figure()
+plt.scatter(df, df1)
+plt.xlabel('Dimension1')
+plt.ylabel('Dimension2')
+plt.title('Input data')
+plt.show()
