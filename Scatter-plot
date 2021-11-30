@@ -13,5 +13,4 @@ plt.xlabel('Dimension1')
 plt.ylabel('Dimension2')
 plt.title('Input data')
 plt.show()
-
-
+#Numeric values are not needed to translate label encoder data.
