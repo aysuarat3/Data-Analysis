@@ -1,0 +1,7 @@
+import seaborn as sns
+sns.lmplot(x="raisedhands",
+           y="AnnouncementsView",
+           col="Input",
+           data=input_data)
+plt.title('Student Academic Features')
+plt.show()
