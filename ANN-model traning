@@ -1,0 +1,79 @@
+#!/usr/bin/python3
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn import preprocessing
+import neurolab as nl
+import neurolab.trans
+input_data = pd.read_csv('main.csv')
+labelencoder = LabelEncoder()
+input_data['gender_N']=labelencoder.fit_transform(input_data['gender'])
+input_data['NationalITy_N']=labelencoder.fit_transform(input_data['NationalITy'])
+input_data['PlaceofBirth_N']=labelencoder.fit_transform(input_data['PlaceofBirth'])
+input_data['StageID_N']=labelencoder.fit_transform(input_data['StageID'])
+input_data['GradeID_N']=labelencoder.fit_transform(input_data['GradeID'])
+input_data['SectionID_N']=labelencoder.fit_transform(input_data['SectionID'])
+input_data['Topic_N']=labelencoder.fit_transform(input_data['Topic'])
+input_data['Semester_N']=labelencoder.fit_transform(input_data['Semester'])
+input_data['Relation_N']=labelencoder.fit_transform(input_data['Relation'])
+input_data['ParentAnsweringSurvey_N']=labelencoder.fit_transform(input_data['ParentAnsweringSurvey'])
+input_data['ParentschoolSatisfaction_N']=labelencoder.fit_transform(input_data['ParentschoolSatisfaction'])
+input_data['StudentAbsenceDays_N']=labelencoder.fit_transform(input_data['StudentAbsenceDays'])
+input_data['Class_N']=labelencoder.fit_transform(input_data['Class'])
+input_data['Class']=input_data['Class'].astype('category')
+input_data['Class']=input_data['Class'].cat.codes
+input_data['gender']=input_data['gender'].astype('category')
+input_data['gender']=input_data['gender'].cat.codes
+input_data['NationalITy']=input_data['NationalITy'].astype('category')
+input_data['NationalITy']=input_data['NationalITy'].cat.codes
+input_data['PlaceofBirth']=input_data['PlaceofBirth'].astype('category')
+input_data['PlaceofBirth']=input_data['PlaceofBirth'].cat.codes
+input_data['StageID']=input_data['StageID'].astype('category')
+input_data['StageID']=input_data['StageID'].cat.codes
+input_data['GradeID']=input_data['GradeID'].astype('category')
+input_data['GradeID']=input_data['GradeID'].cat.codes
+input_data['SectionID']=input_data['SectionID'].astype('category')
+input_data['SectionID']=input_data['SectionID'].cat.codes
+input_data['Topic']=input_data['Topic'].astype('category')
+input_data['Topic']=input_data['Topic'].cat.codes
+input_data['Semester']=input_data['Semester'].astype('category')
+input_data['Semester']=input_data['Semester'].cat.codes
+input_data['Relation']=input_data['Relation'].astype('category')
+input_data['Relation']=input_data['Relation'].cat.codes
+input_data['ParentAnsweringSurvey']=input_data['ParentAnsweringSurvey'].astype('category')
+input_data['ParentAnsweringSurvey']=input_data['ParentAnsweringSurvey'].cat.codes
+input_data['ParentschoolSatisfaction']=input_data['ParentschoolSatisfaction'].astype('category')
+input_data['ParentschoolSatisfaction']=input_data['ParentschoolSatisfaction'].cat.codes
+input_data['StudentAbsenceDays']=input_data['StudentAbsenceDays'].astype('category')
+input_data['StudentAbsenceDays']=input_data['StudentAbsenceDays'].cat.codes
+df = pd.DataFrame(input_data,columns=["gender", "NationalITy","PlaceofBirth","StageID","GradeID","SectionID","Topic",
+                                    "Semester","Relation","ParentAnsweringSurvey","ParentschoolSatisfaction",
+                                    "StudentAbsenceDays","Discussion","raisedhands","VisITedResources","AnnouncementsView"])
+df1 = pd.DataFrame(input_data,columns=["Class"])
+print(df)
+print(df1)
+df1 = np.empty([480, 1])
+X_train, X_test, y_train, y_test = train_test_split(df, df1, test_size=0.30)
+min_max_scaler = preprocessing.MinMaxScaler()
+X_train = min_max_scaler.fit_transform(X_train)
+X_test = min_max_scaler.fit_transform(X_test)
+net = nl.net.newff(nl.tool.minmax(df), [480,3])
+#change the activation function for the output layer
+net.layers[-1].transf = nl.trans.SoftMax() #output layer
+net.layers[0].transf = nl.trans.SoftMax() #hidden layer
+net.layers[1].transf = nl.trans.SoftMax() #hidden layer
+# train the network
+error = net.trainf = nl.train.train_rprop(net,X_train, y_train, epochs=10000, show=10, lr =0.05 ,goal=0.00005)
+plt.plot(error)
+plt.xlabel('Epoch number')
+plt.ylabel('Train error')
+plt.grid()
+plt.show()
+out = net.sim(X_test)
+out = np.around(out)
+correct = (out == y_test).all(axis=1)
+acc=(np.sum(correct)/len(out))*100
+print(acc)
+print(error[-1])
