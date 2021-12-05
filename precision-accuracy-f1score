@@ -1,20 +1,61 @@
 #!/usr/bin/python3
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report
-true_labels = [2,0,0,2,4,4,1,0,3,3,3]
-pred_labels = [2,1,0,2,4,3,1,0,1,3,3]
-confusion_mat = confusion_matrix(true_labels, pred_labels)
-plt.imshow(confusion_mat, interpolation = 'nearest', cmap= plt.cm.gray)
-plt.title('confusion matrix')
-plt.colorbar()
-ticks = np.arrange(5)
-plt.xticks(ticks, ticks)
-plt.yticks(ticks, ticks)
-plt.ylabel('True labels')
-plt.xlabel('predicted labels')
-plt.show()
-#classification report
-targets = ['Class=0', 'Class-1', 'Class-2', 'Class-3', 'Class-4']
-print('\n', classification_report(true_labels, pred_labels, target_names=targets))
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+input_data = pd.read_csv('main.csv')
+labelencoder = LabelEncoder()
+input_data['gender_N']=labelencoder.fit_transform(input_data['gender'])
+input_data['NationalITy_N']=labelencoder.fit_transform(input_data['NationalITy'])
+input_data['PlaceofBirth_N']=labelencoder.fit_transform(input_data['PlaceofBirth'])
+input_data['StageID_N']=labelencoder.fit_transform(input_data['StageID'])
+input_data['GradeID_N']=labelencoder.fit_transform(input_data['GradeID'])
+input_data['SectionID_N']=labelencoder.fit_transform(input_data['SectionID'])
+input_data['Topic_N']=labelencoder.fit_transform(input_data['Topic'])
+input_data['Semester_N']=labelencoder.fit_transform(input_data['Semester'])
+input_data['Relation_N']=labelencoder.fit_transform(input_data['Relation'])
+input_data['ParentAnsweringSurvey_N']=labelencoder.fit_transform(input_data['ParentAnsweringSurvey'])
+input_data['ParentschoolSatisfaction_N']=labelencoder.fit_transform(input_data['ParentschoolSatisfaction'])
+input_data['StudentAbsenceDays_N']=labelencoder.fit_transform(input_data['StudentAbsenceDays'])
+input_data['Class_N']=labelencoder.fit_transform(input_data['Class'])
+input_data['Class']=input_data['Class'].astype('category')
+input_data['Class']=input_data['Class'].cat.codes
+input_data['gender']=input_data['gender'].astype('category')
+input_data['gender']=input_data['gender'].cat.codes
+input_data['NationalITy']=input_data['NationalITy'].astype('category')
+input_data['NationalITy']=input_data['NationalITy'].cat.codes
+input_data['PlaceofBirth']=input_data['PlaceofBirth'].astype('category')
+input_data['PlaceofBirth']=input_data['PlaceofBirth'].cat.codes
+input_data['StageID']=input_data['StageID'].astype('category')
+input_data['StageID']=input_data['StageID'].cat.codes
+input_data['GradeID']=input_data['GradeID'].astype('category')
+input_data['GradeID']=input_data['GradeID'].cat.codes
+input_data['SectionID']=input_data['SectionID'].astype('category')
+input_data['SectionID']=input_data['SectionID'].cat.codes
+input_data['Topic']=input_data['Topic'].astype('category')
+input_data['Topic']=input_data['Topic'].cat.codes
+input_data['Semester']=input_data['Semester'].astype('category')
+input_data['Semester']=input_data['Semester'].cat.codes
+input_data['Relation']=input_data['Relation'].astype('category')
+input_data['Relation']=input_data['Relation'].cat.codes
+input_data['ParentAnsweringSurvey']=input_data['ParentAnsweringSurvey'].astype('category')
+input_data['ParentAnsweringSurvey']=input_data['ParentAnsweringSurvey'].cat.codes
+input_data['ParentschoolSatisfaction']=input_data['ParentschoolSatisfaction'].astype('category')
+input_data['ParentschoolSatisfaction']=input_data['ParentschoolSatisfaction'].cat.codes
+input_data['StudentAbsenceDays']=input_data['StudentAbsenceDays'].astype('category')
+input_data['StudentAbsenceDays']=input_data['StudentAbsenceDays'].cat.codes
+X = pd.DataFrame(input_data,columns=["gender", "NationalITy","PlaceofBirth","StageID","GradeID","SectionID","Topic",
+                                    "Semester","Relation","ParentAnsweringSurvey","ParentschoolSatisfaction",
+                                    "StudentAbsenceDays","Discussion","raisedhands","VisITedResources","AnnouncementsView"])
+y = pd.DataFrame(input_data,columns=["Class"])
+print(X)
+print(y)
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+    test_size=0.4, random_state = 42)
+knn = KNeighborsClassifier(n_neighbors=8)
+knn.fit(X_train, y_train)
+y_pred = knn.predict(X_test)
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
